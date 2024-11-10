@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Responsive Countdown Timer</title>
+    <style>
+      /* General Styles */
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        background-color: #111;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        color: #fff;
+        overflow: hidden;
+      }
+
+      .container {
+        display: flex;
+        gap: 30px;
+        background: rgba(20, 20, 20, 0.9);
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 0 20px #000, 0 0 40px #000;
+        max-width: 900px;
+        width: 100%;
+        align-items: center;
+        animation: container-fade-in 2s ease;
+      }
+
+      /* Left Side: Image */
+      .photo-side {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: photo-bounce 4s infinite ease-in-out;
+      }
+
+      .photo-side img {
+        max-width: 100%;
+        border-radius: 10px;
+        box-shadow: 0 0 15px #000, 0 0 25px #ff00ff;
+        border: 3px solid #0ff;
+        transition: transform 0.3s ease;
+      }
+
+      .photo-side img:hover {
+        transform: scale(1.05) rotate(2deg);
+      }
+
+      /* Right Side: Countdown Timer */
+      .countdown-side {
+        flex: 1;
+        text-align: center;
+      }
+
+      h1 {
+        font-size: 2rem;
+        color: #0ff;
+        margin-bottom: 20px;
+        text-shadow: 0 0 10px #0ff, 0 0 20px #0ff, 0 0 30px #0ff;
+        animation: neon-flicker 2s infinite alternate;
+      }
+
+      /* Countdown Boxes */
+      #countdown {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+
+      .time-box {
+        padding: 20px 15px;
+        border: 2px solid #0ff;
+        border-radius: 10px;
+        width: 100px;
+        text-align: center;
+        background: linear-gradient(135deg, #333, #222);
+        box-shadow: 0 0 15px #0ff, 0 0 20px #f0f;
+        animation: neon-box 3s infinite alternate;
+        transition: transform 0.3s ease;
+      }
+
+      .time-box:hover {
+        transform: translateY(-10px) scale(1.1);
+        box-shadow: 0 0 25px #ff00ff, 0 0 30px #ff00ff;
+      }
+
+      .time-unit {
+        font-size: 2.5rem;
+        font-weight: bold;
+        color: #ff0;
+        text-shadow: 0 0 10px #ff0, 0 0 20px #ff0, 0 0 30px #ff0;
+      }
+
+      .label {
+        font-size: 1rem;
+        color: #0ff;
+        text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+        animation: label-flicker 1.5s infinite alternate;
+      }
+
+      /* Responsive Styles */
+      @media (max-width: 768px) {
+        .container {
+          flex-direction: column;
+          gap: 20px;
+          padding: 15px;
+        }
+
+        h1 {
+          font-size: 1.8rem;
+        }
+
+        .time-box {
+          width: 80px;
+          padding: 15px 10px;
+        }
+
+        .photo-side img {
+          width: 80%;
+        }
+      }
+
+      @media (max-width: 480px) {
+        h1 {
+          font-size: 1.5rem;
+        }
+
+        .time-box {
+          width: 70px;
+          padding: 10px 8px;
+        }
+
+        .photo-side img {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <!-- Left Side: Photo -->
+      <div class="photo-side">
+        <img src="images/nafiul.jpeg" alt="nafiul" />
+      </div>
+
+      <!-- Right Side: Countdown -->
+      <div class="countdown-side">
+        <h1>Countdown to Death</h1>
+        <div id="countdown">
+          <div class="time-box">
+            <div id="days" class="time-unit">00</div>
+            <div class="label">Days</div>
+          </div>
+          <div class="time-box">
+            <div id="hours" class="time-unit">00</div>
+            <div class="label">Hours</div>
+          </div>
+          <div class="time-box">
+            <div id="minutes" class="time-unit">00</div>
+            <div class="label">Minutes</div>
+          </div>
+          <div class="time-box">
+            <div id="seconds" class="time-unit">00</div>
+            <div class="label">Seconds</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const endDate = new Date("2024-11-26T00:00:00").getTime();
+
+      function updateCountdown() {
+        const now = new Date().getTime();
+        const timeLeft = endDate - now;
+
+        if (timeLeft <= 0) {
+          document.getElementById("countdown").innerHTML = "Time's up!";
+          clearInterval(countdownInterval);
+          return;
+        }
+
+        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+        const seconds = Math.floor((timeLeft / 1000) % 60);
+
+        document.getElementById("days").textContent = String(days).padStart(
+          2,
+          "0"
+        );
+        document.getElementById("hours").textContent = String(hours).padStart(
+          2,
+          "0"
+        );
+        document.getElementById("minutes").textContent = String(
+          minutes
+        ).padStart(2, "0");
+        document.getElementById("seconds").textContent = String(
+          seconds
+        ).padStart(2, "0");
+      }
+
+      const countdownInterval = setInterval(updateCountdown, 1000);
+    </script>
+  </body>
+</html>
